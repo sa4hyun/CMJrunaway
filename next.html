@@ -1,0 +1,457 @@
+<html><head>
+	<title>세종과학예술영재학교 - 외출·외박</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="세종과학예술영재학교 기숙사 외출·외박 신청 목록">
+	<meta property="og:title" content="세종과학예술영재학교">
+	<meta property="og:description" content="세종과학예술영재학교 기숙사 외출·외박 신청 목록">
+	<link rel="apple-touch-icon" sizes="180x180" href="../res/image/favicon/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../res/image/favicon/favicon-16x16.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../res/image/favicon/favicon-32x32.png">
+	<link rel="manifest" href="../res/image/favicon/manifest.json">
+	<meta name="theme-color" content="#ffffff">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.1">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="/css/jquery.timepicker.min.css">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+	<script src="/js/jquery-3.1.1.min.js"></script>
+	<script src="/js/jquery-ui.min.js"></script>
+	<script src="/js/jquery.timepicker.min.js"></script>
+<script>
+$(document).ready(function() {
+	// 메뉴 설정
+	$("#outMenu").addClass("ov");
+		$("#outSubMenu").show();
+		$("#outApplyRetSubMenu_2").addClass("sub-ov");
+
+	$("#popCloseBtn_one").click(function() {
+		$("#applyPopup").hide();
+		$(".fl_body").css("min-height", "auto");
+	});
+});
+
+function showApplyPopup()
+{
+	$(".fl_body").css("min-height", "530px");
+	$("#applyFormArea").load("/out/apply.php");
+	$("#applyPopup").show();
+}
+
+function search()
+{
+	var type = $("#searchTypeSelect option:selected").val();
+
+	var searchUrl = "/out/list.php?type=" + type;
+	// location.href = searchUrl;
+}
+
+function delItems()
+{
+	var delItems = "";
+	$(":checkbox[name=itemCheck]:checked").each(function() {
+		if ( delItems != "" ) {
+			delItems += "," + this.value;
+		}
+		else {
+			delItems = this.value;
+		}
+	});
+	$(":checkbox[name=itemCheck_m]:checked").each(function() {
+		if ( delItems != "" ) {
+			delItems += "," + this.value;
+		}
+		else {
+			delItems = this.value;
+		}
+	});
+
+	if ( !delItems ) {
+		alert("삭제할 항목을 선택해주세요");
+		return;
+	}
+
+	if ( confirm("삭제하시겠습니까?") ) {
+		$.post("/Lib/school_out.action.php", {
+			mode: "apply_del",
+			del_items: delItems
+		}, function(result) {
+			if ( result.indexOf("OK") != -1 ) {
+				location.reload();
+			}
+			else {
+				result = JSON.parse(result);
+				if ( result.content == "PERM_ERR" ) {
+					alert("권한이 없습니다");
+				}
+				else if ( result.content == "CHANGED_STATE_EXIST" ) {
+					alert("관리자가 승인 또는 거절한 항목이 포함되어 있기 때문에 삭제할 수 없습니다");
+				}
+				else {
+					alert("삭제 실패하였습니다");
+				}
+			}
+		});
+	}
+}
+</script></head>
+
+<body>
+<div class="main">
+  <script>
+$(document).ready(function() {
+	$("#yearSelect").change(function() {
+		var year = this.value;
+
+		$.post("/Lib/setting.action.php", {
+			mode: "change_year",
+			year: year
+		}, function(result) {
+			result = JSON.parse(result);
+			if ( result.header == "OK" ) {
+				// location.href = "/main/";
+			}
+			else {
+				alert("연도 변경에 실패하였습니다");
+			}
+		});
+  });
+
+	$("#menuOpen").click(function() {
+		// location.href = "/main/m_left_menu.php";
+	})
+});
+
+// function moveDevPage()
+// {
+//     location.href = "/device/list.php";
+// }
+
+// function moveOperationPage()
+// {
+// 	location.href = "/operation/journal_lookup.php";
+// }
+
+// function moveLecturePage()
+// {	
+// 	location.href = "/lecture/lecture_list.php";
+// }
+
+// function moveOutPage()
+// {
+//     location.href = "/out/apply_list.php";
+// }
+
+// function moveStudyPage()
+// {
+  
+//     location.href = "/study/list.php";
+// }
+
+// function movePointPage()
+// {
+//     location.href = "/point/list.php";
+// }
+
+// function moveHealthPage()
+// {
+//     location.href = "/health/inbody_list.php";
+// }
+
+// function startNewYear()
+// {
+// 	location.href = "/main/new_year_change.php";
+// }
+
+function logout()
+{
+  $.post("/Lib/user.action.php", {
+		mode: "logout"
+	}, function(result) {
+		if ( result.indexOf("OK") != -1 ) {
+			// location.href = "/account/login.php";
+		}
+	});
+}
+</script>
+
+<style>
+.head_wrap {
+  padding: 15% 10% 2% 10%;
+}
+.user_wrap {
+	margin-top: 20px;
+	padding: 27px 0;
+}
+.user_wrap .class-info {
+  font-size: 13pt;
+  margin-top: 10px;
+}
+.menu_wrap {
+  margin-top: 50px;
+}
+.menu_wrap li {
+  float: none;
+  font-size: 14pt;
+  color: #36a3db;
+}
+.menu_wrap li:hover {
+  color: #0a4a7f;
+}
+.menu_wrap li:hover img {
+  background: #0a4a7f;
+}
+.menu_wrap li:last-of-type {
+  border-bottom: 0;
+}
+.menu_wrap li.ov {
+  color: #0a4a7f;
+  font-weight: bold;
+  border-top: 2px solid #0a4a7f;
+  border-bottom: 2px solid #0a4a7f;
+}
+.menu_wrap li.ov img {
+  background: #0a4a7f;
+}
+.menu_wrap li span {
+  width: 100px;
+  display: inline-block;
+  margin-left: 20px;
+}
+.menu_wrap .sub-menu {
+  display: none;
+}
+.menu_wrap .sub-menu li {
+  font-size: 12pt;
+  line-height: 40px;
+  height: 40px;
+  text-align: left;
+  border-bottom: 1px dotted #ccc;
+}
+.menu_wrap .sub-menu li::before {
+  content: "·";
+  margin-right: 5px;
+}
+.menu_wrap .sub-menu li:last-child {
+  border-bottom: 0;
+}
+.menu_wrap .sub-menu li.center-line {
+  width: 65%;
+  margin: 0 18%;
+  padding: 0 5%;
+  text-indent: 5px;
+  overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.menu_wrap .sub-menu li.sub-ov {
+  color: #0a4a7f;
+  font-weight: bold;
+}
+.data_wrap {
+  margin-top: 30px;
+}
+.owner {
+  padding: 0 10% 2% 10%;
+}
+.owner .menu_wrap {
+  margin-top: 18px;
+}
+.owner .menu_wrap li {
+  line-height: 63px;
+  height: 63px;
+}
+.owner .menu_wrap .sub-menu li {
+  line-height: 40px;
+  height: 40px;
+}
+.owner .user_lock {
+  margin-top: 30px;
+}
+</style>
+<div class="leftWrap">
+
+  <div class="head_wrap ">
+    <a href="index.html" class="menu_logo">
+      <img src="../res/image/menu_logo.png" class="logo" alt="메뉴 로고">
+    </a>
+		<a href="index.html" class="m_menu_logo">
+			<img src="../res/image/m_logo.png" class="logo" alt="모바일 메뉴 로고">
+		</a>
+    <div class="user_wrap">
+      <p id="name_text">조민준</p>
+        <p id="class_text" class="class-info">3학년 5반 10번</p>
+    </div>
+
+    <div class="menu_wrap">
+      <ul class="mainmenu">
+        <li class="mmenu" id="noticeMenu" onclick="location.href = '/board/notice_list.php';">
+          <span>공지사항</span>
+        </li>
+		<li class="mmenu" id="operationMenu" onclick="moveOperationPage();" style="display:none;">
+          <span>운영일지</span>
+        </li>
+        <ul class="sub-menu" id="operationSubMenu" style="display:none;">
+          <li class="center-line" id="writeSubMenu" onclick="location.href = '/operation/journal_write.php';">운영일지 작성</li>
+          <li class="center-line" id="lookupSubMenu" onclick="location.href = '/operation/journal_lookup.php';">운영일지 조회</li>
+        </ul>
+		<li class="mmenu" id="scheduleMenu" onclick="location.href = '/schedule/academic.php';" style="display:none;">
+		  <span>학사일정</span>
+		</li>
+        <li class="mmenu ov" id="outMenu" onclick="moveOutPage();">
+          <span>외출·외박</span>
+        </li>
+        <ul class="sub-menu" id="outSubMenu" style="display: block;">
+          <li class="center-line" id="outApplySubMenu" onclick="location.href = '/out/apply_list.php';">신청</li>
+            <li class="center-line sub-ov" id="outApplyRetSubMenu_2" onclick="location.href = '/out/list.php';">승인 / 거절</li>
+        </ul>
+		<li class="mmenu" id="deviceMenu" onclick="moveDevPage();">
+		  <span>전자기기</span>
+		</li>
+		<ul class="sub-menu" id="devSubMenu">
+		</ul>
+		<li class="mmenu" id="lectureMenu" onclick="moveLecturePage();" style="display:none;">
+		  <span>수강정보</span>
+		</li>
+        <li class="mmenu" id="studyMenu" onclick="moveStudyPage();">
+          <span>자율학습</span>
+        </li>
+        <ul class="sub-menu" id="studySubMenu">
+        
+		  <li class="center-line" id="studyApplySubMenu" onclick="location.href = '/study/list.php';">자율학습 신청/현황</li>
+		  <li class="center-line" id="studystatus" onclick="location.href = '/study/status_act_type.php';">자율학습 통계</li>
+        </ul>
+        <li class="mmenu" id="pointMenu" onclick="movePointPage();">
+          <span>상·벌점</span>
+        </li>
+        <ul class="sub-menu" id="pointSubMenu">
+          <li class="center-line" id="pointClassSubMenu" onclick="movePointPage();">상·벌점 현황</li>
+          <li class="center-line" id="pointstatus" onclick="location.href = '/point/point_status.php';">상·벌점 통계</li>
+		</ul>
+					<li class="mmenu" id="healthMenu" onclick="moveHealthPage();">
+						<span>건강관리</span>
+					</li>
+					<ul class="sub-menu" id="healthSubMenu">
+	          <li class="center-line" id="inbodySubMenu" onclick="moveHealthPage();"><span id="smallmenu">인바디</span></li>
+	          <li class="center-line" id="dosingSubMenu" onclick="location.href = '/health/dosing_list.php';"><span id="smallmenu">투약</span></li>
+			  <li class="center-line" id="emergencySubMenu" onclick="location.href = '/health/emergency_list.php';"><span id="smallmenu">응급진료</span></li>
+			  <li class="center-line" id="careSubMenu" onclick="location.href = '/health/care_list.php';"><span id="smallmenu">요양</span></li>
+	        </ul>
+      </ul>
+    </div>
+		<a class="m_btn" id="menuOpen"><i class="xi-bars"></i></a>
+
+    <div class="user_lock">
+	      <div class="pw_change">
+	        <a href="/account/password.php">비밀번호 변경</a>
+	      </div>
+      <div class="logout">
+        <a href="javascript:void(0);" onclick="logout();">로그아웃</a>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="fl_body">
+    <div class="contents_wrap">
+      <div class="tit_box">
+        <h2>외출·외박</h2>
+      </div>
+
+				<button onclick="showApplyPopup();" class="apply_btn"><i class="xi-border-color"></i></button>
+
+			<div class="search_box form-inline">
+        <div class="form-group outList">
+          <select class="form-control mr-1" id="searchTypeSelect">
+						<option value="">구분</option>
+						<option value="1">외출</option>
+						<option value="2">외박</option>
+          </select>
+        </div>
+        <button class="search_btn apply" title="검색" onclick="search();"><i class="xi-search xi-2x"></i></button>
+      </div>
+
+		  <div class="m-table table-hover">
+			  	<ul class="title">
+					<div style="padding-left: 8px;">
+<li class="item check"></li>						<li class="confirm appro" style="margin-left:0px;">승인</li>
+					  <li class="info appli" style="float:right;">03-06(월)18:12</li>
+					  <li class="info application parent" style="float:left;margin-left:10%;">외출 <b style="color:#c3c3c3;">|</b> 03-06(월) 07:00&nbsp;-&nbsp;03-06(월) 10:00</li>
+					  <li class="info reason parent"><b>사유</b> 금강 축구</li>
+				  </div>
+				</ul>
+		  </div>
+
+      <table class="table table-hover">
+        <colgroup>
+<col width="3%">          <col width="5%">
+          <col width="7%">
+          <col width="19%">
+          <col width="47%">
+          <col width="9%">
+          <col width="10%">
+        </colgroup>
+        <thead>
+          <tr>
+<td></td>            <td>번호</td>
+            <td>구분</td>
+            <td>시간</td>
+            <td class="table-left">사유</td>
+            <td>신청일</td>
+            <td>승인여부</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+<td></td>            <td>1</td>
+            <td id="type_text">외박</td>
+            <td id="datetime_text">03-06(월) 07:00&nbsp;-&nbsp;03-06(월)10:00</td>
+            <td id="reason_text" class="table-left">사유</td>
+            <td id="a_text">03-06(월)18:12</td>
+            <td class="appro">승인</td>
+          </tr>
+        </tbody>
+      </table>
+
+			<div class="row">
+					<div class="del-btn-wrap">
+						<button onclick="delItems();" class="delete_btn"><i class="xi-trash"></i></button>
+					</div>
+
+				  <div class="col align-center text-center fixed-lecture-page-links">
+				  	<ul class="page"><li><a href="list.php?page=1" class="page-link"><i class="fas fa-angle-double-left"></i></a></li><li><i class="fas fa-angle-left"></i></li><li class="current-page"><span>1</span></li><li><i class="fas fa-angle-right"></i></li><li><a href="list.php?page=1" class="page-link"><i class="fas fa-angle-double-right"></i></a></li></ul>
+				  </div>
+			</div>
+    </div>
+  </div>
+
+  <div class="footer_wrap">
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"No one ignorant of geometry enter&nbsp;here."</p>
+</div>
+<p></p>
+<div class="footer_wrap">
+    <p><a href="http://sasa.sjeduhs.kr/msi/indvdlInfoPolicy.do" target="_blank">개인정보처리방침</a> | ⓒ 2022 세종과학예술영재학교 All rights reserved.</p>
+</div>
+<div class="m_footer_wrap">
+    <a href="http://sasa.sjeduhs.kr/msi/indvdlInfoPolicy.do" target="_blank">개인정보처리방침</a><p>"No one ignorant of geometry enter&nbsp;here."</p><p>ⓒ 2022 세종과학예술영재학교 All rights reserved.</p><img src="../res/image/m_footerlogo.png" alt="모바일하단로고">
+</div>
+  <div id="applyPopup">
+		<div class="applyPopup_box school_out">
+			<h2 class="popUpTit">외출·외박 신청</h2>
+		  <button id="popCloseBtn_one"><i class="xi-close"></i></button>
+		  <div class="select_box" id="applyFormArea"></div>
+
+			<div class="popUpBtnBox">
+				<button onclick="apply();" id="popUploadBtn_one">신청</button>
+				<div class="loading-box" id="loadingBox">
+					<i class="xi-spinner-1"></i>
+				</div>
+			</div>
+		</div>
+  </div>
+</div>
+
+</body>
+<script type="text/javascript" src="received.js"  charset="UTF-8"></script></html>

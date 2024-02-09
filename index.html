@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <title>슬기로운 학탈 생활</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+</head>
+
+<body class="has-text-centered">
+    <h1 class="is-size-2 has-text-success">슬기로운 학탈 생활</h1>
+    <b>간편하게 외출증을 만들어 보아요.</b>
+    <div class="container" style="margin-top: 10px">
+        <form method="get">
+            <p>이름</p>
+            <input id="u_name" type="text" required="required"/>
+            <p>학년 / 반 / 번호</p>
+            <input id="grade" type="number" value="1" min="1" max="3" required="required"/>
+            <input id="c_number" type="number" value="1" min="1" max="6" required="required"/>
+            <input id="number" type="number" value="1" min="1" max="16" required="required"/>
+            <p>구분</p>
+            <select id="typeSelect">
+                <option value="외출">외출</option>
+                <option value="외박">외박</option>
+            </select>
+            <p>날짜</p>
+            <div class="beginBox">
+                <input type="date" id="beginDate"/>
+                <input type="time" id="beginTime"/>
+            </div>
+            <div class="divide-box">~</div>
+            <div class="endBox">
+                <input type="date" id="endDate"/>
+                <input type="time" id="endTime"/>
+            </div>
+            <p>사유</p>
+            <input id="reason" type="text" required="required" />
+            <p>신청일</p>
+            <div class="beginBox">
+                <input type="date" id="appDate"/>
+                <input type="time" id="appTime"/>
+            </div>
+            <!-- <input type="submit" value="만들기"> -->
+            <button id="end-button">만들기</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById("beginDate").value = new Date()
+            .toISOString()
+            .substring(0, 10);
+        document.getElementById("endDate").value = new Date()
+            .toISOString()
+            .substring(0, 10);
+        document.getElementById("appDate").value = new Date()
+            .toISOString()
+            .substring(0, 10);
+        document.getElementById("beginTime").value = new Date()
+            .toISOString()
+            .slice(11, 16);
+        document.getElementById("endTime").value = new Date()
+            .toISOString()
+            .slice(11, 16);
+        document.getElementById("appTime").value = new Date()
+            .toISOString()
+            .slice(11, 16);
+    </script>
+    <script type="text/javascript" src="send.js"></script>
+</body>
+
+</html>
